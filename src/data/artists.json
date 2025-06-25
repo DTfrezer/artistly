@@ -26,5 +26,47 @@
     "category": "Speaker",
     "price": 9000,
     "location": "Bangalore"
+  },
+  {
+    "id": 5,
+    "name": "Siddharth Kapoor",
+    "category": "Singer",
+    "price": 18000,
+    "location": "Chandigarh"
+  },
+  {
+    "id": 6,
+    "name": "Ananya Iyer",
+    "category": "Dancer",
+    "price": 11000,
+    "location": "Chennai"
+  },
+  {
+    "id": 7,
+    "name": "Karan Mehta",
+    "category": "DJ",
+    "price": 20000,
+    "location": "Hyderabad"
+  },
+  {
+    "id": 8,
+    "name": "Pooja Rathi",
+    "category": "Speaker",
+    "price": 8000,
+    "location": "Kolkata"
+  },
+  {
+    "id": 9,
+    "name": "Tanishq Bhandari",
+    "category": "Singer",
+    "price": 13500,
+    "location": "Ahmedabad"
+  },
+  {
+    "id": 10,
+    "name": "Simran Kaur",
+    "category": "Dancer",
+    "price": 9500,
+    "location": "Amritsar"
   }
 ]

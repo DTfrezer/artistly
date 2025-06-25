@@ -11,7 +11,6 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 
-// ✅ Type definition
 type ArtistFormData = {
   name: string;
   bio: string;
@@ -21,12 +20,19 @@ type ArtistFormData = {
   location: string;
 };
 
-// ✅ Validation schema
-const schema: yup.ObjectSchema<ArtistFormData> = yup.object({
+const schema = yup.object<ArtistFormData>({
   name: yup.string().required('Name is required'),
   bio: yup.string().required('Bio is required'),
-  category: yup.array().of(yup.string()).min(1, 'Select at least one category'),
-  languages: yup.array().of(yup.string()).min(1, 'Select at least one language'),
+  category: yup
+    .array()
+    .of(yup.string())
+    .min(1, 'Select at least one category')
+    .required('Category is required'),
+  languages: yup
+    .array()
+    .of(yup.string())
+    .min(1, 'Select at least one language')
+    .required('Languages are required'),
   fee: yup.string().required('Fee range is required'),
   location: yup.string().required('Location is required'),
 });
