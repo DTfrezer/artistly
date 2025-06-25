@@ -11,26 +11,25 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 
-// 1️⃣ Build schema with .shape, arrays .required() so they're always string[]
-const schema = yup.object().shape({
+// ✅ Validation schema
+const schema = yup.object({
   name: yup.string().required('Name is required'),
   bio: yup.string().required('Bio is required'),
   category: yup
     .array()
-    .of(yup.string())
+    .of(yup.string().required())
     .min(1, 'Select at least one category')
     .required('Category is required'),
   languages: yup
     .array()
-    .of(yup.string())
+    .of(yup.string().required())
     .min(1, 'Select at least one language')
     .required('Languages are required'),
   fee: yup.string().required('Fee range is required'),
   location: yup.string().required('Location is required'),
 });
 
-// 2️⃣ Infer type exactly from that schema
-type ArtistFormData = yup.InferType<typeof schema>;
+type ArtistFormData = yup.Asserts<typeof schema>;
 
 const categories = ['Singer', 'Dancer', 'DJ', 'Speaker'];
 const languages = ['English', 'Hindi', 'Marathi', 'Tamil'];
@@ -120,13 +119,15 @@ export default function OnboardPage() {
           <p className="text-red-500 text-sm">{errors.languages?.message}</p>
         </div>
 
-        {/* Fee Range */}
+        {/* Fee */}
         <div>
           <label>Fee Range</label>
           <select {...register('fee')} className="w-full border px-2 py-1 rounded">
             <option value="">Select Fee</option>
             {feeRanges.map((f) => (
-              <option key={f} value={f}>{f}</option>
+              <option key={f} value={f}>
+                {f}
+              </option>
             ))}
           </select>
           <p className="text-red-500 text-sm">{errors.fee?.message}</p>
@@ -139,7 +140,7 @@ export default function OnboardPage() {
           <p className="text-red-500 text-sm">{errors.location?.message}</p>
         </div>
 
-        {/* Profile Image Preview */}
+        {/* Profile Image Upload */}
         <div>
           <label>Profile Image (optional)</label>
           <Input
@@ -165,8 +166,9 @@ export default function OnboardPage() {
           )}
         </div>
 
-        {/* Submit */}
-        <Button type="submit" className="mt-4">Submit</Button>
+        <Button type="submit" className="mt-4">
+          Submit
+        </Button>
       </form>
     </main>
   );
