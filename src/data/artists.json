@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Aarav Sharma",
+    "category": "Singer",
+    "price": 12000,
+    "location": "Mumbai"
+  },
+  {
+    "id": 2,
+    "name": "Ishita Verma",
+    "category": "Dancer",
+    "price": 10000,
+    "location": "Delhi"
+  },
+  {
+    "id": 3,
+    "name": "Rohan Desai",
+    "category": "DJ",
+    "price": 15000,
+    "location": "Pune"
+  },
+  {
+    "id": 4,
+    "name": "Meera Nair",
+    "category": "Speaker",
+    "price": 9000,
+    "location": "Bangalore"
+  }
+]
