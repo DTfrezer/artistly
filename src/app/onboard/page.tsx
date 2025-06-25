@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import Image from "next/image";
 
 // ✅ Define the type for your form data
 type ArtistFormData = {
@@ -47,7 +48,7 @@ export default function OnboardPage() {
     },
   });
 
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const onSubmit = async (data: ArtistFormData) => {
     console.log("Submitting to Firebase:", data);
@@ -139,6 +140,7 @@ export default function OnboardPage() {
           <label>Profile Image (optional)</label>
           <Input
             type="file"
+            accept="image/*"
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) {
@@ -151,7 +153,15 @@ export default function OnboardPage() {
             }}
           />
           {imagePreview && (
-            <img src={imagePreview} alt="Preview" className="mt-2 h-32 rounded" />
+            <div className="mt-2 h-32 w-32 relative rounded overflow-hidden">
+              <Image
+                src={imagePreview}
+                alt="Preview"
+                layout="fill"
+                objectFit="cover"
+                className="rounded"
+              />
+            </div>
           )}
         </div>
 
