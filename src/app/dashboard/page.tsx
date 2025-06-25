@@ -1,4 +1,3 @@
-// src/app/dashboard/page.tsx
 'use client';
 
 import { useEffect, useState } from "react";
@@ -6,12 +5,15 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Table from "@/components/Table";
 
+// Match the actual Firestore structure
 interface Artist {
   id: string;
   name: string;
+  bio: string;
   category: string[];
+  languages: string[];
+  fee: string;
   location: string;
-  price: number;
 }
 
 export default function DashboardPage() {
@@ -21,10 +23,18 @@ export default function DashboardPage() {
     const fetchArtists = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "artists"));
-        const docs = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Artist[];
+        const docs: Artist[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            name: data.name || "",
+            bio: data.bio || "",
+            category: data.category || [],
+            languages: data.languages || [],
+            fee: data.fee || "",
+            location: data.location || "",
+          };
+        });
 
         setArtists(docs);
       } catch (error) {
