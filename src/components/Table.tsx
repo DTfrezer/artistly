@@ -1,9 +1,11 @@
 interface Artist {
-  id: number;
+  id: string;
   name: string;
-  category: string;
+  bio: string;
+  category: string[];
+  languages: string[];
+  fee: string;
   location: string;
-  price: number;
 }
 
 interface TableProps {
