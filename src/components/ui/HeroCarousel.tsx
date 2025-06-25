@@ -30,12 +30,15 @@ export default function HeroCarousel() {
       className="keen-slider mt-10 max-w-3xl mx-auto rounded-xl overflow-hidden shadow-lg"
     >
       {images.map((img, index) => (
-        <div className="keen-slider__slide relative h-64 w-full" key={index}>
+        <div
+          key={index}
+          className="keen-slider__slide relative h-64 w-full"
+        >
           <Image
             src={img}
             alt={`Artist ${index + 1}`}
-            layout="fill"
-            objectFit="cover"
+            fill
+            className="object-cover"
             priority
           />
         </div>
