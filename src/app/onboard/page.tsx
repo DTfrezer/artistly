@@ -10,6 +10,16 @@ import { Button } from "@/components/ui/button";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
+// ✅ Define the type for your form data
+type ArtistFormData = {
+  name: string;
+  bio: string;
+  category: string[];
+  languages: string[];
+  fee: string;
+  location: string;
+};
+
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   bio: yup.string().required("Bio is required"),
@@ -28,8 +38,8 @@ export default function OnboardPage() {
     register,
     handleSubmit,
     formState: { errors },
-    reset // ✅ added reset
-  } = useForm({
+    reset,
+  } = useForm<ArtistFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
       category: [],
@@ -39,7 +49,7 @@ export default function OnboardPage() {
 
   const [imagePreview, setImagePreview] = useState("");
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ArtistFormData) => {
     console.log("Submitting to Firebase:", data);
 
     try {
