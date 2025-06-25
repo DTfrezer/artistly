@@ -11,16 +11,8 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 
-type ArtistFormData = {
-  name: string;
-  bio: string;
-  category: string[];
-  languages: string[];
-  fee: string;
-  location: string;
-};
-
-const schema = yup.object<ArtistFormData>({
+// 1️⃣ Define your schema without a generic, but require arrays
+const schema = yup.object({
   name: yup.string().required('Name is required'),
   bio: yup.string().required('Bio is required'),
   category: yup
@@ -37,6 +29,10 @@ const schema = yup.object<ArtistFormData>({
   location: yup.string().required('Location is required'),
 });
 
+// 2️⃣ Infer your form data type from that schema
+type ArtistFormData = yup.InferType<typeof schema>;
+
+// Static options
 const categories = ['Singer', 'Dancer', 'DJ', 'Speaker'];
 const languages = ['English', 'Hindi', 'Marathi', 'Tamil'];
 const feeRanges = ['₹5,000–₹10,000', '₹10,000–₹20,000', '₹20,000+'];
@@ -76,7 +72,6 @@ export default function OnboardPage() {
   return (
     <main className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">🎙️ Artist Onboarding Form</h1>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Name */}
         <div>
@@ -84,73 +79,61 @@ export default function OnboardPage() {
           <Input {...register('name')} />
           <p className="text-red-500 text-sm">{errors.name?.message}</p>
         </div>
-
         {/* Bio */}
         <div>
           <label>Bio</label>
           <Textarea {...register('bio')} />
           <p className="text-red-500 text-sm">{errors.bio?.message}</p>
         </div>
-
         {/* Category */}
         <div>
           <label>Category (multi-select)</label>
           {categories.map((cat) => (
-            <div key={cat}>
-              <label>
-                <input
-                  type="checkbox"
-                  value={cat}
-                  {...register('category')}
-                  className="mr-2"
-                />
-                {cat}
-              </label>
-            </div>
+            <label key={cat} className="block">
+              <input
+                type="checkbox"
+                value={cat}
+                {...register('category')}
+                className="mr-2"
+              />
+              {cat}
+            </label>
           ))}
           <p className="text-red-500 text-sm">{errors.category?.message}</p>
         </div>
-
         {/* Languages */}
         <div>
           <label>Languages Spoken</label>
           {languages.map((lang) => (
-            <div key={lang}>
-              <label>
-                <input
-                  type="checkbox"
-                  value={lang}
-                  {...register('languages')}
-                  className="mr-2"
-                />
-                {lang}
-              </label>
-            </div>
+            <label key={lang} className="block">
+              <input
+                type="checkbox"
+                value={lang}
+                {...register('languages')}
+                className="mr-2"
+              />
+              {lang}
+            </label>
           ))}
           <p className="text-red-500 text-sm">{errors.languages?.message}</p>
         </div>
-
         {/* Fee Range */}
         <div>
           <label>Fee Range</label>
           <select {...register('fee')} className="w-full border px-2 py-1 rounded">
             <option value="">Select Fee</option>
             {feeRanges.map((f) => (
-              <option key={f} value={f}>
-                {f}
-              </option>
+              <option key={f} value={f}>{f}</option>
             ))}
           </select>
           <p className="text-red-500 text-sm">{errors.fee?.message}</p>
         </div>
-
         {/* Location */}
         <div>
           <label>Location</label>
           <Input {...register('location')} />
           <p className="text-red-500 text-sm">{errors.location?.message}</p>
         </div>
-
         {/* Profile Image Preview */}
         <div>
           <label>Profile Image (optional)</label>
@@ -161,30 +144,23 @@ export default function OnboardPage() {
               const file = e.target.files?.[0];
               if (file) {
                 const reader = new FileReader();
-                reader.onloadend = () => {
-                  setImagePreview(reader.result as string);
-                };
+                reader.onloadend = () => setImagePreview(reader.result as string);
                 reader.readAsDataURL(file);
               }
             }}
           />
           {imagePreview && (
-            <div className="mt-2">
-              <Image
-                src={imagePreview}
-                alt="Preview"
-                width={128}
-                height={128}
-                className="object-cover rounded"
-              />
-            </div>
+            <Image
+              src={imagePreview}
+              alt="Preview"
+              width={128}
+              height={128}
+              className="object-cover rounded mt-2"
+            />
           )}
         </div>
-
         {/* Submit */}
-        <Button type="submit" className="mt-4">
-          Submit
-        </Button>
+        <Button type="submit" className="mt-4">Submit</Button>
       </form>
     </main>
   );
