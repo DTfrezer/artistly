@@ -11,8 +11,8 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 
-// 1️⃣ Define your schema without a generic, but require arrays
-const schema = yup.object({
+// 1️⃣ Build schema with .shape, arrays .required() so they're always string[]
+const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
   bio: yup.string().required('Bio is required'),
   category: yup
@@ -29,10 +29,9 @@ const schema = yup.object({
   location: yup.string().required('Location is required'),
 });
 
-// 2️⃣ Infer your form data type from that schema
+// 2️⃣ Infer type exactly from that schema
 type ArtistFormData = yup.InferType<typeof schema>;
 
-// Static options
 const categories = ['Singer', 'Dancer', 'DJ', 'Speaker'];
 const languages = ['English', 'Hindi', 'Marathi', 'Tamil'];
 const feeRanges = ['₹5,000–₹10,000', '₹10,000–₹20,000', '₹20,000+'];
@@ -64,7 +63,7 @@ export default function OnboardPage() {
       reset();
       setImagePreview('');
     } catch (error) {
-      console.error('Error submitting artist:', error);
+      console.error(error);
       alert('Submission failed.');
     }
   };
@@ -79,12 +78,14 @@ export default function OnboardPage() {
           <Input {...register('name')} />
           <p className="text-red-500 text-sm">{errors.name?.message}</p>
         </div>
+
         {/* Bio */}
         <div>
           <label>Bio</label>
           <Textarea {...register('bio')} />
           <p className="text-red-500 text-sm">{errors.bio?.message}</p>
         </div>
+
         {/* Category */}
         <div>
           <label>Category (multi-select)</label>
@@ -101,6 +102,7 @@ export default function OnboardPage() {
           ))}
           <p className="text-red-500 text-sm">{errors.category?.message}</p>
         </div>
+
         {/* Languages */}
         <div>
           <label>Languages Spoken</label>
@@ -117,6 +119,7 @@ export default function OnboardPage() {
           ))}
           <p className="text-red-500 text-sm">{errors.languages?.message}</p>
         </div>
+
         {/* Fee Range */}
         <div>
           <label>Fee Range</label>
@@ -128,12 +131,14 @@ export default function OnboardPage() {
           </select>
           <p className="text-red-500 text-sm">{errors.fee?.message}</p>
         </div>
+
         {/* Location */}
         <div>
           <label>Location</label>
           <Input {...register('location')} />
           <p className="text-red-500 text-sm">{errors.location?.message}</p>
         </div>
+
         {/* Profile Image Preview */}
         <div>
           <label>Profile Image (optional)</label>
@@ -159,6 +164,7 @@ export default function OnboardPage() {
             />
           )}
         </div>
+
         {/* Submit */}
         <Button type="submit" className="mt-4">Submit</Button>
       </form>
