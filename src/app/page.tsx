@@ -1,12 +1,9 @@
-"use client";
-
-import HeroCarousel from "@/components/HeroCarousel";
+import Image from "next/image";
+import HeroCarousel from "@/components/ui/HeroCarousel";
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white via-gray-100 to-white flex flex-col items-center justify-start px-4">
-      
-      {/* 🔥 Add Hero Carousel at the top */}
       <HeroCarousel />
 
       <div className="max-w-4xl text-center py-20">
@@ -24,14 +21,12 @@ export default function HomePage() {
           >
             🎨 Explore Artists
           </a>
-
           <a
             href="/onboard"
             className="px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-full shadow hover:bg-gray-300 transition"
           >
             🚀 Become an Artist
           </a>
-
           <a
             href="/dashboard"
             className="px-6 py-3 bg-green-600 text-white font-medium rounded-full shadow hover:bg-green-700 transition"
@@ -40,11 +35,15 @@ export default function HomePage() {
           </a>
         </div>
 
-        <img
-          src="/landing-illustration.svg"
-          alt="Artists"
-          className="mt-12 w-full max-w-md mx-auto"
-        />
+        <div className="mt-12 w-full max-w-md mx-auto relative aspect-[1/1]">
+          <Image
+            src="/landing-illustration.svg"
+            alt="Artists"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
       </div>
     </main>
   );

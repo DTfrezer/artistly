@@ -11,24 +11,18 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Image from "next/image";
 
-// ✅ Define the type for your form data
-type ArtistFormData = {
-  name: string;
-  bio: string;
-  category: string[];
-  languages: string[];
-  fee: string;
-  location: string;
-};
-
-const schema = yup.object().shape({
+// ✅ Create schema
+const schema = yup.object({
   name: yup.string().required("Name is required"),
   bio: yup.string().required("Bio is required"),
-  category: yup.array().min(1, "Select at least one category"),
-  languages: yup.array().min(1, "Select at least one language"),
+  category: yup.array().of(yup.string()).min(1, "Select at least one category"),
+  languages: yup.array().of(yup.string()).min(1, "Select at least one language"),
   fee: yup.string().required("Fee range is required"),
   location: yup.string().required("Location is required"),
 });
+
+// ✅ Use Yup inference to keep types consistent
+type ArtistFormData = yup.InferType<typeof schema>;
 
 const categories = ["Singer", "Dancer", "DJ", "Speaker"];
 const languages = ["English", "Hindi", "Marathi", "Tamil"];
@@ -51,13 +45,11 @@ export default function OnboardPage() {
   const [imagePreview, setImagePreview] = useState<string>("");
 
   const onSubmit = async (data: ArtistFormData) => {
-    console.log("Submitting to Firebase:", data);
-
     try {
       await addDoc(collection(db, "artists"), data);
       alert("Artist submitted successfully to Firebase!");
-      reset(); // ✅ clear form
-      setImagePreview(""); // ✅ clear image preview
+      reset();
+      setImagePreview("");
     } catch (error) {
       console.error("Error submitting artist:", error);
       alert("Submission failed.");
@@ -153,13 +145,13 @@ export default function OnboardPage() {
             }}
           />
           {imagePreview && (
-            <div className="mt-2 h-32 w-32 relative rounded overflow-hidden">
+            <div className="mt-2">
               <Image
                 src={imagePreview}
                 alt="Preview"
-                layout="fill"
-                objectFit="cover"
-                className="rounded"
+                width={128}
+                height={128}
+                className="object-cover rounded"
               />
             </div>
           )}

@@ -29,9 +29,9 @@ export default function Table({ data }: TableProps) {
           {data.map((artist) => (
             <tr key={artist.id} className="border-t hover:bg-gray-50">
               <td className="px-4 py-2">{artist.name}</td>
-              <td className="px-4 py-2">{artist.category}</td>
+              <td className="px-4 py-2">{artist.category.join(", ")}</td>
               <td className="px-4 py-2">{artist.location}</td>
-              <td className="px-4 py-2">₹{artist.price}</td>
+              <td className="px-4 py-2">₹{artist.fee}</td>
               <td className="px-4 py-2">
                 <button className="text-blue-600 hover:underline">View</button>
               </td>

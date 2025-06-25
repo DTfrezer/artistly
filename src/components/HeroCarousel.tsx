@@ -3,13 +3,16 @@
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { useEffect } from "react";
+import Image from "next/image";
 
 export default function HeroCarousel() {
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
-    slides: { perView: 1 },
     mode: "snap",
-    spacing: 10,
+    slides: {
+      perView: 1,
+      spacing: 10,
+    },
   });
 
   useEffect(() => {
@@ -27,11 +30,13 @@ export default function HeroCarousel() {
       className="keen-slider mt-10 max-w-3xl mx-auto rounded-xl overflow-hidden shadow-lg"
     >
       {images.map((img, index) => (
-        <div className="keen-slider__slide" key={index}>
-          <img
+        <div className="keen-slider__slide relative h-64 w-full" key={index}>
+          <Image
             src={img}
             alt={`Artist ${index + 1}`}
-            className="w-full h-64 object-cover"
+            layout="fill"
+            objectFit="cover"
+            priority
           />
         </div>
       ))}
